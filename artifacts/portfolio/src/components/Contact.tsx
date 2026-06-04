@@ -1,16 +1,50 @@
 import { motion } from "framer-motion";
-import { Mail, Github, Linkedin, Send, Copy, CheckCircle2, MapPin } from "lucide-react";
+import { Mail, Github, Linkedin, Send, Copy, CheckCircle2, MapPin, Loader2 } from "lucide-react";
 import { SiHackerrank } from "react-icons/si";
-import { useState } from "react";
+import { useState, useRef } from "react";
+import emailjs from "@emailjs/browser";
 
 export function Contact() {
   const [copied, setCopied] = useState(false);
   const email = "paridhishukla2101@gmail.com";
+  
+  const formRef = useRef<HTMLFormElement>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<string>("idle");
 
   const handleCopy = () => {
     navigator.clipboard.writeText(email);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!formRef.current) return;
+    
+    setIsSubmitting(true);
+    setSubmitStatus("idle");
+
+    // Ensure these match your EmailJS account details!
+    const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID || "YOUR_SERVICE_ID";
+    const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || "YOUR_TEMPLATE_ID";
+    const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || "YOUR_PUBLIC_KEY";
+
+    emailjs.sendForm(serviceId, templateId, formRef.current, {
+      publicKey: publicKey,
+    })
+      .then((result) => {
+        console.log("Email successfully sent!", result.text);
+        setSubmitStatus("success");
+        formRef.current?.reset();
+      }, (error) => {
+        console.error("Failed to send email.", error.text);
+        setSubmitStatus(error.text || "error");
+      })
+      .finally(() => {
+        setIsSubmitting(false);
+        setTimeout(() => setSubmitStatus("idle"), 5000);
+      });
   };
 
   return (
@@ -56,22 +90,25 @@ export function Contact() {
             transition={{ duration: 0.6, delay: 0.2 }}
           >
             <h3 className="text-2xl font-bold text-white mb-6">Send a Transmission</h3>
-            <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); alert("Form submission mocked for portfolio demo."); }}>
+            
+            <form ref={formRef} className="space-y-4" onSubmit={handleSubmit}>
               <div>
-                <label htmlFor="name" className="block text-sm font-mono text-slate-400 mb-2">01. Name</label>
+                <label htmlFor="user_name" className="block text-sm font-mono text-slate-400 mb-2">01. Name</label>
                 <input 
                   type="text" 
-                  id="name"
+                  id="user_name"
+                  name="user_name"
                   className="w-full bg-[#050816] border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all font-mono"
                   placeholder="Enter your name"
                   required
                 />
               </div>
               <div>
-                <label htmlFor="email" className="block text-sm font-mono text-slate-400 mb-2">02. Email</label>
+                <label htmlFor="user_email" className="block text-sm font-mono text-slate-400 mb-2">02. Email</label>
                 <input 
                   type="email" 
-                  id="email"
+                  id="user_email"
+                  name="user_email"
                   className="w-full bg-[#050816] border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all font-mono"
                   placeholder="Enter your email"
                   required
@@ -81,17 +118,36 @@ export function Contact() {
                 <label htmlFor="message" className="block text-sm font-mono text-slate-400 mb-2">03. Message</label>
                 <textarea 
                   id="message"
+                  name="message"
                   rows={4}
                   className="w-full bg-[#050816] border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all font-mono resize-none"
                   placeholder="Enter your message"
                   required
                 ></textarea>
               </div>
+              
+              {submitStatus === "success" && (
+                <div className="p-3 bg-green-500/10 border border-green-500/20 rounded-lg text-green-400 text-sm font-mono text-center">
+                  Message transmitted successfully!
+                </div>
+              )}
+              
+              {submitStatus !== "idle" && submitStatus !== "success" && (
+                <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-lg text-red-400 text-sm font-mono text-center">
+                  Transmission failed: {submitStatus}
+                </div>
+              )}
+
               <button 
                 type="submit"
-                className="w-full py-4 rounded-lg bg-white text-black font-bold flex items-center justify-center gap-2 hover:bg-primary hover:text-white transition-colors group"
+                disabled={isSubmitting}
+                className="w-full py-4 rounded-lg bg-white text-black font-bold flex items-center justify-center gap-2 hover:bg-primary hover:text-white transition-colors group disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Launch Message <Send className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                {isSubmitting ? (
+                  <>Transmitting... <Loader2 className="w-4 h-4 animate-spin" /></>
+                ) : (
+                  <>Launch Message <Send className="w-4 h-4 group-hover:translate-x-1 transition-transform" /></>
+                )}
               </button>
             </form>
           </motion.div>
