@@ -2,7 +2,6 @@ import { motion } from "framer-motion";
 import { Mail, Github, Linkedin, Send, Copy, CheckCircle2, MapPin, Loader2 } from "lucide-react";
 import { SiHackerrank } from "react-icons/si";
 import { useState, useRef } from "react";
-import emailjs from "@emailjs/browser";
 
 export function Contact() {
   const [copied, setCopied] = useState(false);
@@ -18,33 +17,45 @@ export function Contact() {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formRef.current) return;
     
     setIsSubmitting(true);
     setSubmitStatus("idle");
 
-    // Ensure these match your EmailJS account details!
-    const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID || "YOUR_SERVICE_ID";
-    const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || "YOUR_TEMPLATE_ID";
-    const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || "YOUR_PUBLIC_KEY";
+    const formData = new FormData(formRef.current);
 
-    emailjs.sendForm(serviceId, templateId, formRef.current, {
-      publicKey: publicKey,
-    })
-      .then((result) => {
-        console.log("Email successfully sent!", result.text);
+    try {
+      const response = await fetch("https://formsubmit.co/ajax/paridhishukla2101@gmail.com", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+        },
+        body: JSON.stringify({
+          name: formData.get("name"),
+          email: formData.get("email"),
+          message: formData.get("message"),
+          _subject: "New Portfolio Contact Message",
+        }),
+      });
+
+      const data = await response.json();
+      
+      if (response.ok && data.success) {
         setSubmitStatus("success");
         formRef.current?.reset();
-      }, (error) => {
-        console.error("Failed to send email.", error.text);
-        setSubmitStatus(error.text || "error");
-      })
-      .finally(() => {
-        setIsSubmitting(false);
-        setTimeout(() => setSubmitStatus("idle"), 5000);
-      });
+      } else {
+        setSubmitStatus(data.message || "Something went wrong. Please try again.");
+      }
+    } catch (error) {
+      console.error("Failed to send message:", error);
+      setSubmitStatus("Network error. Please check your connection and try again.");
+    } finally {
+      setIsSubmitting(false);
+      setTimeout(() => setSubmitStatus("idle"), 6000);
+    }
   };
 
   return (
@@ -93,22 +104,22 @@ export function Contact() {
             
             <form ref={formRef} className="space-y-4" onSubmit={handleSubmit}>
               <div>
-                <label htmlFor="user_name" className="block text-sm font-mono text-slate-400 mb-2">01. Name</label>
+                <label htmlFor="name" className="block text-sm font-mono text-slate-400 mb-2">01. Name</label>
                 <input 
                   type="text" 
-                  id="user_name"
-                  name="user_name"
+                  id="name"
+                  name="name"
                   className="w-full bg-[#050816] border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all font-mono"
                   placeholder="Enter your name"
                   required
                 />
               </div>
               <div>
-                <label htmlFor="user_email" className="block text-sm font-mono text-slate-400 mb-2">02. Email</label>
+                <label htmlFor="email" className="block text-sm font-mono text-slate-400 mb-2">02. Email</label>
                 <input 
                   type="email" 
-                  id="user_email"
-                  name="user_email"
+                  id="email"
+                  name="email"
                   className="w-full bg-[#050816] border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all font-mono"
                   placeholder="Enter your email"
                   required
