@@ -43,7 +43,7 @@ module.exports = async function handler(req, res) {
   try {
     await transporter.sendMail({
       from: `"${name}" <${email}>`,
-      to: gmailUser,
+      to: 'paridhishukla2101@gmail.com',
       replyTo: email,
       subject: `New Portfolio Message from ${name}`,
       text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`,
