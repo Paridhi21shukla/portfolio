@@ -1,0 +1,32 @@
+uploads = []
+outputs = []
+
+[[generated]]
+id = "-uWOCKTsNTuGAKljdWdjy"
+uri = "file://artifacts/portfolio/public/images/netra-ai.png"
+type = "image"
+title = "Netra AI vision"
+
+[[generated]]
+id = "yYd9QycSOB4AhVWOHN2E0"
+uri = "file://artifacts/portfolio/public/images/cogniguard.png"
+type = "image"
+title = "CogniGuard code"
+
+[[generated]]
+id = "ObENVFH7kR0V5oBPa7ciC"
+uri = "file://artifacts/portfolio/public/images/enrolment.png"
+type = "image"
+title = "Data dashboard"
+
+[[generated]]
+id = "lWStK_7comaoFQNVcMAOF"
+uri = "file://artifacts/portfolio/public/images/cloud-explorer.png"
+type = "image"
+title = "Cloud computing nodes"
+
+[[generated]]
+id = "cuftwfc_tzoqdwhwwGatp"
+uri = "file://artifacts/portfolio/public/images/biokit.png"
+type = "image"
+title = "Eco medical kit"
