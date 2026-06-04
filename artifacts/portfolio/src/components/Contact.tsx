@@ -27,17 +27,15 @@ export function Contact() {
     const formData = new FormData(formRef.current);
 
     try {
-      const response = await fetch("https://formsubmit.co/ajax/paridhishukla2101@gmail.com", {
+      const response = await fetch("/api/send-email", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Accept": "application/json",
         },
         body: JSON.stringify({
           name: formData.get("name"),
           email: formData.get("email"),
           message: formData.get("message"),
-          _subject: "New Portfolio Contact Message",
         }),
       });
 
