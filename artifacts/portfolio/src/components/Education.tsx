@@ -22,10 +22,7 @@ export function Education() {
       location: "New Delhi",
       date: "Completed",
       description: "Science stream with focus on Physics, Chemistry, and Mathematics.",
-      achievements: [
-        "Graduated with distinction in Physics, Chemistry, and Mathematics",
-        "Active member of the student Science & Innovation society"
-      ],
+      achievements: [],
       active: false
     },
     {
@@ -33,11 +30,8 @@ export function Education() {
       institution: "Delhi Public School",
       location: "Bulandshahr",
       date: "Completed",
-      description: "Foundation studies.",
-      achievements: [
-        "Graduated with honors and scored 90%+ in board examinations",
-        "Represented school in regional Science Exhibitions & Math Olympiads"
-      ],
+      description: "Foundation studies in core academics, building a strong base for higher education.",
+      achievements: [],
       active: false
     }
   ];
