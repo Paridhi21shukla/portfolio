@@ -3,7 +3,7 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import { Points, PointMaterial } from "@react-three/drei";
 import { useState, useRef, Suspense, useEffect } from "react";
 import * as THREE from "three";
-import { Github, Linkedin, ExternalLink } from "lucide-react";
+import { Github, Linkedin } from "lucide-react";
 import { SiHackerrank } from "react-icons/si";
 
 function ParticleField() {
@@ -23,7 +23,7 @@ function ParticleField() {
     return positions;
   });
 
-  useFrame((state, delta) => {
+  useFrame((_state, delta) => {
     if (ref.current) {
       ref.current.rotation.x -= delta / 10;
       ref.current.rotation.y -= delta / 15;
@@ -45,12 +45,40 @@ function ParticleField() {
   );
 }
 
+/* Small orbit particle dot */
+function OrbitParticle({ radius, duration, size, color, startAngle }: {
+  radius: number; duration: number; size: number; color: string; startAngle: number;
+}) {
+  return (
+    <motion.div
+      className="absolute top-1/2 left-1/2 pointer-events-none"
+      style={{ width: radius * 2, height: radius * 2, marginLeft: -radius, marginTop: -radius }}
+      animate={{ rotate: 360 }}
+      transition={{ repeat: Infinity, duration, ease: "linear" }}
+      initial={{ rotate: startAngle }}
+    >
+      <div
+        className="absolute rounded-full"
+        style={{
+          width: size,
+          height: size,
+          top: -size / 2,
+          left: "50%",
+          marginLeft: -size / 2,
+          background: color,
+          boxShadow: `0 0 ${size * 3}px ${color}`,
+        }}
+      />
+    </motion.div>
+  );
+}
+
 export function Hero() {
   const roles = [
     "Computer Engineering Student",
     "Full Stack Developer",
     "AI & Software Enthusiast",
-    "Problem Solver | Developer"
+    "Problem Solver | Developer",
   ];
   const [currentRoleIndex, setCurrentRoleIndex] = useState(0);
 
@@ -62,8 +90,11 @@ export function Hero() {
   }, [roles.length]);
 
   return (
-    <section id="hero" className="relative w-full min-h-screen flex items-center overflow-hidden pt-20">
-      {/* Particle Background */}
+    <section
+      id="hero"
+      className="relative w-full min-h-screen flex items-center overflow-hidden pt-16"
+    >
+      {/* ── Three.js Particle Background ── */}
       <div className="absolute inset-0 z-0">
         <Canvas camera={{ position: [0, 0, 5] }}>
           <Suspense fallback={null}>
@@ -72,208 +103,275 @@ export function Hero() {
         </Canvas>
       </div>
 
-      {/* Ambient background glows */}
-      <div className="absolute inset-0 z-1 pointer-events-none">
-        {/* Left side ambient glow */}
-        <div className="absolute top-1/2 left-0 -translate-y-1/2 w-[500px] h-[500px] bg-primary/8 rounded-full blur-[120px]" />
-        {/* Right side glow behind profile image */}
-        <div className="absolute top-1/2 right-0 -translate-y-1/2 w-[600px] h-[600px] bg-secondary/6 rounded-full blur-[130px]" />
-        <div className="absolute top-1/2 right-1/4 -translate-y-1/2 -translate-x-1/2 w-[350px] h-[350px] bg-primary/10 rounded-full blur-[80px]" />
+      {/* ── Static ambient glows ── */}
+      <div className="absolute inset-0 z-[1] pointer-events-none">
+        <div className="absolute top-1/2 -translate-y-1/2 left-[-10%] w-[520px] h-[520px] rounded-full bg-primary/10 blur-[140px]" />
+        <div className="absolute top-[30%] right-[-5%] w-[520px] h-[520px] rounded-full bg-secondary/8 blur-[140px]" />
+        <div className="absolute top-[55%] right-[20%] w-[300px] h-[300px] rounded-full bg-primary/12 blur-[100px]" />
       </div>
 
-      {/* Main Content */}
-      <div className="relative z-10 container mx-auto px-6 py-12 grid grid-cols-1 md:grid-cols-12 gap-12 items-center">
+      {/* ── Main grid ── */}
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-12 grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-0 items-center min-h-screen py-24">
 
-        {/* Left: Text Content */}
-        <div className="md:col-span-7 flex flex-col items-center md:items-start text-center md:text-left">
+        {/* ════ LEFT: Text Content ════ */}
+        <div className="flex flex-col items-center lg:items-start text-center lg:text-left order-2 lg:order-1">
+
+          {/* Badge */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="mb-5 inline-block px-4 py-1.5 rounded-full border border-primary/30 bg-primary/10 backdrop-blur-md text-sm font-mono text-primary"
+            className="mb-5 inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/30 bg-primary/10 backdrop-blur-md text-xs font-mono text-primary tracking-wider"
           >
-            ✦ Transforming Ideas Into Intelligent Solutions
+            <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+            Transforming Ideas Into Intelligent Solutions
           </motion.div>
 
+          {/* Name */}
           <motion.h1
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 28 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tighter mb-4 text-white leading-tight"
+            transition={{ duration: 0.65, delay: 0.2 }}
+            className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-tighter leading-[1.0] mb-5 text-white"
           >
             <span className="block">Paridhi</span>
-            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-pop">
+            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-purple-400">
               Shukla
             </span>
           </motion.h1>
 
-          <div className="h-10 flex items-center mb-5">
+          {/* Typewriter role */}
+          <div className="h-8 flex items-center mb-6">
             <motion.p
               key={currentRoleIndex}
-              initial={{ opacity: 0, y: 15 }}
+              initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -15 }}
-              transition={{ duration: 0.4 }}
-              className="text-lg md:text-xl font-mono text-secondary/90"
+              transition={{ duration: 0.35 }}
+              className="text-base sm:text-lg font-mono text-secondary/90"
             >
-              &gt; {roles[currentRoleIndex]}<motion.span animate={{ opacity: [0, 1, 0] }} transition={{ repeat: Infinity, duration: 0.8 }}>_</motion.span>
+              &gt;&nbsp;{roles[currentRoleIndex]}
+              <motion.span
+                animate={{ opacity: [0, 1, 0] }}
+                transition={{ repeat: Infinity, duration: 0.8 }}
+              >
+                _
+              </motion.span>
             </motion.p>
           </div>
 
+          {/* Description */}
           <motion.p
-            className="text-base md:text-lg text-slate-400 max-w-lg mb-8 leading-relaxed"
+            className="text-sm sm:text-base text-slate-400 max-w-md mb-8 leading-relaxed"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 0.5 }}
+            transition={{ delay: 0.45 }}
           >
-            Passionate Computer Engineering student focused on software development, AI, and problem-solving. I build practical solutions that combine creativity, technology, and innovation.
+            Passionate Computer Engineering student focused on software
+            development, AI, and problem‑solving. I build practical solutions
+            that combine creativity, technology, and innovation.
           </motion.p>
 
+          {/* CTA Buttons */}
           <motion.div
-            className="flex flex-col sm:flex-row gap-3 w-full md:w-auto mb-8"
-            initial={{ opacity: 0, y: 20 }}
+            className="flex flex-col sm:flex-row gap-3 mb-8 w-full lg:w-auto"
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6 }}
+            transition={{ delay: 0.55 }}
           >
-            <a href="#projects" className="px-7 py-3 rounded-md bg-primary text-white font-medium hover:bg-primary/90 transition-all hover:shadow-[0_0_20px_rgba(139,92,246,0.4)] border border-primary text-center text-sm">
+            <a
+              href="#projects"
+              className="px-7 py-3 rounded-lg bg-primary text-white text-sm font-semibold hover:bg-primary/85 transition-all hover:shadow-[0_0_22px_rgba(139,92,246,0.45)] border border-primary/60 text-center"
+            >
               View Projects
             </a>
-            <a href="/Paridhi_Shukla_Resume.docx" target="_blank" className="px-7 py-3 rounded-md bg-transparent text-white font-medium hover:bg-white/5 transition-all border border-white/20 text-center text-sm">
+            <a
+              href="/Paridhi_Shukla_Resume.docx"
+              target="_blank"
+              className="px-7 py-3 rounded-lg bg-white/5 text-white text-sm font-medium hover:bg-white/10 transition-all border border-white/15 text-center backdrop-blur-sm"
+            >
               Resume
             </a>
-            <a href="#contact" className="px-7 py-3 rounded-md bg-transparent text-secondary font-medium hover:bg-secondary/10 transition-all border border-secondary/50 text-center text-sm hover:shadow-[0_0_20px_rgba(6,182,212,0.2)]">
+            <a
+              href="#contact"
+              className="px-7 py-3 rounded-lg bg-secondary/10 text-secondary text-sm font-medium hover:bg-secondary/18 transition-all border border-secondary/40 text-center hover:shadow-[0_0_18px_rgba(6,182,212,0.2)]"
+            >
               Say Hello
             </a>
           </motion.div>
 
+          {/* Social Links */}
           <motion.div
-            className="flex gap-5"
+            className="flex gap-4"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 0.8 }}
+            transition={{ delay: 0.75 }}
           >
-            <a href="https://github.com/Paridhi21shukla" target="_blank" rel="noreferrer" aria-label="GitHub Profile"
-              className="w-10 h-10 rounded-full border border-white/10 bg-white/5 flex items-center justify-center text-slate-400 hover:text-white hover:border-white/30 hover:bg-white/10 transition-all">
-              <Github className="w-4 h-4" />
-            </a>
-            <a href="https://linkedin.com" target="_blank" rel="noreferrer" aria-label="LinkedIn Profile"
-              className="w-10 h-10 rounded-full border border-white/10 bg-white/5 flex items-center justify-center text-slate-400 hover:text-[#0A66C2] hover:border-[#0A66C2]/30 hover:bg-[#0A66C2]/10 transition-all">
-              <Linkedin className="w-4 h-4" />
-            </a>
-            <a href="https://hackerrank.com" target="_blank" rel="noreferrer" aria-label="HackerRank Profile"
-              className="w-10 h-10 rounded-full border border-white/10 bg-white/5 flex items-center justify-center text-slate-400 hover:text-[#00EA64] hover:border-[#00EA64]/30 hover:bg-[#00EA64]/10 transition-all">
-              <SiHackerrank className="w-4 h-4" />
-            </a>
+            {[
+              { href: "https://github.com/Paridhi21shukla", label: "GitHub", icon: <Github className="w-[18px] h-[18px]" />, hover: "hover:text-white hover:border-white/30 hover:bg-white/10" },
+              { href: "https://linkedin.com", label: "LinkedIn", icon: <Linkedin className="w-[18px] h-[18px]" />, hover: "hover:text-[#0A66C2] hover:border-[#0A66C2]/40 hover:bg-[#0A66C2]/10" },
+              { href: "https://hackerrank.com", label: "HackerRank", icon: <SiHackerrank className="w-[18px] h-[18px]" />, hover: "hover:text-[#00EA64] hover:border-[#00EA64]/40 hover:bg-[#00EA64]/10" },
+            ].map((s) => (
+              <a
+                key={s.label}
+                href={s.href}
+                target="_blank"
+                rel="noreferrer"
+                aria-label={s.label}
+                className={`w-10 h-10 rounded-xl border border-white/10 bg-white/5 flex items-center justify-center text-slate-400 transition-all duration-200 backdrop-blur-sm ${s.hover}`}
+              >
+                {s.icon}
+              </a>
+            ))}
           </motion.div>
         </div>
 
-        {/* Right: Profile Photo */}
-        <div className="md:col-span-5 flex items-center justify-center">
+        {/* ════ RIGHT: Profile Photo ════ */}
+        <div className="flex items-center justify-center lg:justify-end order-1 lg:order-2 relative">
           <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
+            initial={{ opacity: 0, scale: 0.85, x: 30 }}
+            animate={{ opacity: 1, scale: 1, x: 0 }}
+            transition={{ duration: 0.85, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
             className="relative"
           >
-            {/* Outer ambient nebula glow */}
-            <div className="absolute inset-0 -m-16 bg-gradient-radial from-primary/15 via-secondary/8 to-transparent rounded-full blur-2xl pointer-events-none" />
-            <div className="absolute inset-0 -m-8 bg-gradient-radial from-secondary/10 via-primary/5 to-transparent rounded-full blur-xl pointer-events-none" />
+            {/* ── Deep nebula halos (behind everything) ── */}
+            <div className="absolute inset-0 -m-24 rounded-full bg-secondary/12 blur-[80px] pointer-events-none" />
+            <div className="absolute inset-0 -m-16 rounded-full bg-primary/18 blur-[60px] pointer-events-none" />
+            <div className="absolute inset-0 -m-6 rounded-full bg-secondary/10 blur-[30px] pointer-events-none" />
 
-            {/* Orbit ring 1 */}
+            {/* ── Orbit particles ── */}
+            <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 2 }}>
+              <OrbitParticle radius={210} duration={22} size={6} color="#8B5CF6" startAngle={0} />
+              <OrbitParticle radius={210} duration={22} size={4} color="#06B6D4" startAngle={180} />
+              <OrbitParticle radius={185} duration={16} size={5} color="#06B6D4" startAngle={90} />
+              <OrbitParticle radius={185} duration={16} size={3} color="#8B5CF6" startAngle={270} />
+              <OrbitParticle radius={235} duration={30} size={3} color="#A78BFA" startAngle={45} />
+            </div>
+
+            {/* ── Orbit rings ── */}
             <motion.div
+              className="absolute rounded-full border border-primary/18 pointer-events-none"
+              style={{ inset: -45, borderStyle: "dashed" }}
               animate={{ rotate: 360 }}
-              transition={{ repeat: Infinity, duration: 12, ease: "linear" }}
-              className="absolute inset-0 -m-6 rounded-full border border-primary/20"
-              style={{ borderStyle: "dashed" }}
+              transition={{ repeat: Infinity, duration: 22, ease: "linear" }}
+            />
+            <motion.div
+              className="absolute rounded-full border border-secondary/14 pointer-events-none"
+              style={{ inset: -70, borderStyle: "dashed" }}
+              animate={{ rotate: -360 }}
+              transition={{ repeat: Infinity, duration: 30, ease: "linear" }}
             />
 
-            {/* Orbit ring 2 */}
+            {/* ── Floating wrapper ── */}
             <motion.div
-              animate={{ rotate: -360 }}
-              transition={{ repeat: Infinity, duration: 18, ease: "linear" }}
-              className="absolute inset-0 -m-12 rounded-full border border-secondary/15"
-              style={{ borderStyle: "dashed" }}
-            />
-
-            {/* Floating orbit dot 1 */}
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ repeat: Infinity, duration: 12, ease: "linear" }}
-              className="absolute inset-0 -m-6 rounded-full"
+              animate={{ y: [-10, 10, -10] }}
+              transition={{ repeat: Infinity, duration: 6, ease: "easeInOut" }}
+              className="relative z-10"
             >
-              <div className="absolute -top-1.5 left-1/2 -translate-x-1/2 w-3 h-3 rounded-full bg-primary shadow-[0_0_10px_rgba(139,92,246,0.8)]" />
-            </motion.div>
+              {/* Glassmorphism card (slightly rounded rectangle, not circle) */}
+              <div className="relative w-[300px] h-[380px] sm:w-[340px] sm:h-[430px] lg:w-[390px] lg:h-[490px] rounded-3xl overflow-hidden">
 
-            {/* Floating orbit dot 2 */}
-            <motion.div
-              animate={{ rotate: -360 }}
-              transition={{ repeat: Infinity, duration: 18, ease: "linear" }}
-              className="absolute inset-0 -m-12 rounded-full"
-            >
-              <div className="absolute -top-1.5 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-secondary shadow-[0_0_10px_rgba(6,182,212,0.8)]" />
-            </motion.div>
+                {/* Multi-stop holographic border */}
+                <div className="absolute inset-0 rounded-3xl p-[2px] bg-gradient-to-br from-primary via-secondary via-50% to-purple-500"
+                  style={{ zIndex: 3, background: "linear-gradient(135deg, #8B5CF6 0%, #06B6D4 40%, #A78BFA 70%, #8B5CF6 100%)" }}
+                >
+                  {/* Inner container */}
+                  <div className="w-full h-full rounded-[22px] overflow-hidden bg-[#070d1f] relative">
 
-            {/* Floating animation wrapper */}
-            <motion.div
-              animate={{ y: [-8, 8, -8] }}
-              transition={{ repeat: Infinity, duration: 5, ease: "easeInOut" }}
-              className="relative"
-            >
-              {/* Glassmorphic container */}
-              <div className="relative w-64 h-64 md:w-72 md:h-72 lg:w-80 lg:h-80 rounded-full">
-                {/* Glowing border */}
-                <div className="absolute inset-0 rounded-full bg-gradient-to-br from-primary via-secondary to-pop p-[2px]">
-                  <div className="w-full h-full rounded-full bg-[#050816] overflow-hidden">
+                    {/* Photo — shifted up to focus on face */}
                     <img
                       src="/profile.jpg"
-                      alt="Paridhi Shukla"
-                      className="w-full h-full object-cover object-top scale-110"
-                      style={{ filter: "brightness(1.05) contrast(1.02)" }}
+                      alt="Paridhi Shukla — Computer Engineering Student"
+                      className="w-full h-full object-cover"
+                      style={{
+                        objectPosition: "center 8%",
+                        filter: "brightness(1.08) contrast(1.06) saturate(1.05)",
+                        transform: "scale(1.08)",
+                        transformOrigin: "center 15%",
+                      }}
                     />
+
+                    {/* Bottom glass overlay — metadata strip */}
+                    <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-[#070d1f]/90 via-[#070d1f]/40 to-transparent backdrop-blur-sm flex items-end px-5 pb-4">
+                      <div>
+                        <p className="text-white text-sm font-semibold leading-tight">Paridhi Shukla</p>
+                        <p className="text-secondary/80 text-xs font-mono">Computer Engineering · GLA University</p>
+                      </div>
+                    </div>
+
+                    {/* Subtle inner vignette for depth */}
+                    <div className="absolute inset-0 rounded-[22px] shadow-[inset_0_0_40px_rgba(5,8,22,0.4)] pointer-events-none" />
                   </div>
                 </div>
 
-                {/* Inner glow overlay */}
-                <div className="absolute inset-0 rounded-full shadow-[0_0_40px_rgba(139,92,246,0.3),0_0_80px_rgba(6,182,212,0.15),inset_0_0_20px_rgba(139,92,246,0.1)] pointer-events-none" />
+                {/* Outer glow ring */}
+                <div
+                  className="absolute inset-0 rounded-3xl pointer-events-none"
+                  style={{
+                    zIndex: 4,
+                    boxShadow: "0 0 35px rgba(139,92,246,0.35), 0 0 70px rgba(6,182,212,0.15), 0 0 120px rgba(139,92,246,0.08)",
+                  }}
+                />
               </div>
 
-              {/* Corner HUD indicators */}
-              <div className="absolute -top-3 -left-3 w-6 h-6 border-t-2 border-l-2 border-primary rounded-tl-sm" />
-              <div className="absolute -top-3 -right-3 w-6 h-6 border-t-2 border-r-2 border-secondary rounded-tr-sm" />
-              <div className="absolute -bottom-3 -left-3 w-6 h-6 border-b-2 border-l-2 border-secondary rounded-bl-sm" />
-              <div className="absolute -bottom-3 -right-3 w-6 h-6 border-b-2 border-r-2 border-primary rounded-br-sm" />
+              {/* ── HUD corner accents ── */}
+              <div className="absolute -top-[3px] -left-[3px] w-7 h-7 border-t-2 border-l-2 border-primary rounded-tl-lg z-20" />
+              <div className="absolute -top-[3px] -right-[3px] w-7 h-7 border-t-2 border-r-2 border-secondary rounded-tr-lg z-20" />
+              <div className="absolute -bottom-[3px] -left-[3px] w-7 h-7 border-b-2 border-l-2 border-secondary rounded-bl-lg z-20" />
+              <div className="absolute -bottom-[3px] -right-[3px] w-7 h-7 border-b-2 border-r-2 border-primary rounded-br-lg z-20" />
 
-              {/* Status indicator */}
+              {/* ── Status badge ── */}
               <motion.div
-                className="absolute -bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 backdrop-blur-md"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 1.2 }}
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 1.1 }}
+                className="absolute -bottom-5 left-1/2 -translate-x-1/2 whitespace-nowrap flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#0b1020]/80 border border-white/10 backdrop-blur-md z-20"
               >
                 <motion.div
-                  className="w-2 h-2 rounded-full bg-green-400"
+                  className="w-1.5 h-1.5 rounded-full bg-green-400"
                   animate={{ opacity: [1, 0.3, 1] }}
                   transition={{ repeat: Infinity, duration: 2 }}
                 />
-                <span className="text-xs font-mono text-slate-300">Available for hire</span>
+                <span className="text-[11px] font-mono text-slate-300 tracking-wide">Available for hire</span>
+              </motion.div>
+
+              {/* ── Floating skill pill (top-right accent) ── */}
+              <motion.div
+                initial={{ opacity: 0, x: 12 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 1.3 }}
+                className="absolute -top-4 -right-6 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary/20 border border-primary/30 backdrop-blur-md z-20"
+              >
+                <span className="text-primary text-xs">⚡</span>
+                <span className="text-[11px] font-mono text-primary/90">Full Stack</span>
+              </motion.div>
+
+              {/* ── Floating AI pill (left accent) ── */}
+              <motion.div
+                initial={{ opacity: 0, x: -12 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 1.5 }}
+                className="absolute top-1/3 -left-10 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-secondary/15 border border-secondary/30 backdrop-blur-md z-20"
+              >
+                <span className="text-secondary text-xs">🤖</span>
+                <span className="text-[11px] font-mono text-secondary/90">AI · ML</span>
               </motion.div>
             </motion.div>
           </motion.div>
         </div>
       </div>
 
-      {/* Scroll indicator */}
+      {/* ── Scroll indicator ── */}
       <motion.div
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+        className="absolute bottom-7 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-10"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 1.2, duration: 1 }}
+        transition={{ delay: 1.4, duration: 1 }}
       >
-        <span className="text-xs font-mono text-slate-500 uppercase tracking-widest">Scroll</span>
-        <div className="w-[1px] h-12 bg-gradient-to-b from-primary/50 to-transparent relative overflow-hidden">
+        <span className="text-[10px] font-mono text-slate-500 uppercase tracking-widest">Scroll</span>
+        <div className="w-[1px] h-10 bg-gradient-to-b from-primary/50 to-transparent relative overflow-hidden">
           <motion.div
             className="w-full h-1/2 bg-primary absolute top-0"
-            animate={{ top: ['-50%', '100%'] }}
+            animate={{ top: ["-50%", "100%"] }}
             transition={{ repeat: Infinity, duration: 1.5, ease: "linear" }}
           />
         </div>
