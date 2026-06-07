@@ -82,10 +82,8 @@ function Cursor() {
 export function Hero() {
   const roles = [
     "Computer Engineering Student",
-    "AI Enthusiast",
-    "Full Stack Developer",
+    "AI Enthusiast | Full Stack Developer",
     "Problem Solver",
-    "Cloud Architect",
   ];
   const [roleIdx, setRoleIdx] = useState(0);
   const [displayed, setDisplayed] = useState("");
@@ -149,7 +147,7 @@ export function Hero() {
       {/* ══════════════════════════════════════
           MAIN CONTENT — 45 / 55 grid
       ══════════════════════════════════════ */}
-      <div className="relative z-10 w-full max-w-[1280px] mx-auto px-6 lg:px-12 grid grid-cols-1 lg:grid-cols-[1fr_1.1fr] gap-8 lg:gap-0 items-center min-h-screen pt-24 pb-16">
+      <div className="relative z-10 w-full max-w-[1280px] mx-auto px-6 lg:px-12 grid grid-cols-1 lg:grid-cols-[1fr_1.1fr] gap-12 lg:gap-20 items-center min-h-screen pt-24 pb-16">
 
         {/* ════════════════════════
             LEFT — CONTENT
@@ -301,37 +299,37 @@ export function Hero() {
             className="relative cursor-none"
           >
             {/* ── Deep nebula halo layers ── */}
-            <div className="absolute inset-0 -m-20 rounded-full bg-gradient-radial from-primary/18 to-transparent blur-[70px] pointer-events-none" />
-            <div className="absolute inset-0 -m-12 rounded-full bg-gradient-radial from-secondary/14 to-transparent blur-[50px] pointer-events-none" />
-            <div className="absolute inset-0 -m-4 rounded-full bg-gradient-radial from-primary/10 to-transparent blur-[25px] pointer-events-none" />
+            <div className="absolute inset-0 -m-20 rounded-full bg-gradient-radial from-primary/12 to-transparent blur-[70px] pointer-events-none" />
+            <div className="absolute inset-0 -m-12 rounded-full bg-gradient-radial from-secondary/10 to-transparent blur-[50px] pointer-events-none" />
+            <div className="absolute inset-0 -m-4 rounded-full bg-gradient-radial from-primary/8 to-transparent blur-[25px] pointer-events-none" />
 
-            {/* ── Orbit rings ── */}
+            {/* ── Orbit rings (reduced by 20% size and dominance) ── */}
             <motion.div
-              className="absolute rounded-full border border-primary/20 pointer-events-none"
-              style={{ inset: -52, borderStyle: "dashed", borderDasharray: "4 8" } as any}
+              className="absolute rounded-full border border-primary/15 pointer-events-none"
+              style={{ inset: -12, borderStyle: "dashed", borderDasharray: "4 8" } as any}
               animate={{ rotate: 360 }}
               transition={{ repeat: Infinity, duration: 20, ease: "linear" }}
             />
             <motion.div
-              className="absolute rounded-full border border-secondary/15 pointer-events-none"
-              style={{ inset: -82, borderStyle: "dashed", borderDasharray: "3 12" } as any}
+              className="absolute rounded-full border border-secondary/10 pointer-events-none"
+              style={{ inset: -30, borderStyle: "dashed", borderDasharray: "3 12" } as any}
               animate={{ rotate: -360 }}
               transition={{ repeat: Infinity, duration: 32, ease: "linear" }}
             />
             <motion.div
-              className="absolute rounded-full border border-purple-500/10 pointer-events-none"
-              style={{ inset: -116 }}
+              className="absolute rounded-full border border-purple-500/5 pointer-events-none"
+              style={{ inset: -50 }}
               animate={{ rotate: 360 }}
               transition={{ repeat: Infinity, duration: 48, ease: "linear" }}
             />
 
             {/* ── Orbit particles ── */}
-            <OrbitDot r={185} dur={20} sz={7} color="#8B5CF6" start={0} />
-            <OrbitDot r={185} dur={20} sz={4} color="#06B6D4" start={180} />
-            <OrbitDot r={210} dur={32} sz={5} color="#06B6D4" start={60} />
-            <OrbitDot r={210} dur={32} sz={3} color="#A78BFA" start={240} />
-            <OrbitDot r={240} dur={48} sz={4} color="#8B5CF6" start={120} />
-            <OrbitDot r={240} dur={48} sz={3} color="#38bdf8" start={300} />
+            <OrbitDot r={210} dur={20} sz={6} color="#8B5CF6" start={0} />
+            <OrbitDot r={210} dur={20} sz={4} color="#06B6D4" start={180} />
+            <OrbitDot r={228} dur={32} sz={5} color="#06B6D4" start={60} />
+            <OrbitDot r={228} dur={32} sz={3} color="#A78BFA" start={240} />
+            <OrbitDot r={248} dur={48} sz={4} color="#8B5CF6" start={120} />
+            <OrbitDot r={248} dur={48} sz={3} color="#38bdf8" start={300} />
 
             {/* ── Floating + magnetic wrapper ── */}
             <motion.div
@@ -340,8 +338,8 @@ export function Hero() {
               style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
               className="relative z-10"
             >
-              {/* Portrait circle */}
-              <div className="relative w-[260px] h-[260px] sm:w-[300px] sm:h-[300px] lg:w-[340px] lg:h-[340px] rounded-full">
+              {/* Portrait circle (increased size by 15-20%) */}
+              <div className="relative w-[300px] h-[300px] sm:w-[340px] sm:h-[340px] lg:w-[395px] lg:h-[395px] rounded-full">
 
                 {/* Holographic border ring */}
                 <div
@@ -356,6 +354,11 @@ export function Hero() {
                       src="/profile.png"
                       alt="Paridhi Shukla — AI & Full Stack Engineer"
                       className="w-full h-full object-cover"
+                      style={{
+                        objectPosition: "center 12%",
+                        transform: "scale(1.5)",
+                        transformOrigin: "center 12%",
+                      }}
                     />
                     {/* Subtle inner shadow vignette */}
                     <div className="absolute inset-0 rounded-full shadow-[inset_0_0_50px_rgba(5,8,22,0.5)]" />
@@ -366,7 +369,7 @@ export function Hero() {
                 <div
                   className="absolute inset-0 rounded-full pointer-events-none"
                   style={{
-                    boxShadow: "0 0 40px rgba(139,92,246,0.4), 0 0 80px rgba(6,182,212,0.18), 0 0 140px rgba(139,92,246,0.10)",
+                    boxShadow: "0 0 35px rgba(139,92,246,0.3), 0 0 70px rgba(6,182,212,0.12), 0 0 120px rgba(139,92,246,0.06)",
                   }}
                 />
               </div>
@@ -376,7 +379,7 @@ export function Hero() {
                 initial={{ opacity: 0, x: 16 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 1.2 }}
-                className="absolute -right-6 top-[18%] flex items-center gap-2 px-3.5 py-2 rounded-2xl bg-[#0c1428]/85 border border-primary/25 backdrop-blur-md shadow-[0_8px_32px_rgba(0,0,0,0.4)] z-20"
+                className="absolute -right-12 top-[20%] flex items-center gap-2 px-3.5 py-2 rounded-2xl bg-[#0c1428]/85 border border-primary/25 backdrop-blur-md shadow-[0_8px_32px_rgba(0,0,0,0.4)] z-20"
               >
                 <span className="text-base">🤖</span>
                 <div>
@@ -389,7 +392,7 @@ export function Hero() {
                 initial={{ opacity: 0, x: -16 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 1.4 }}
-                className="absolute -left-8 bottom-[22%] flex items-center gap-2 px-3.5 py-2 rounded-2xl bg-[#0c1428]/85 border border-secondary/25 backdrop-blur-md shadow-[0_8px_32px_rgba(0,0,0,0.4)] z-20"
+                className="absolute -left-14 bottom-[24%] flex items-center gap-2 px-3.5 py-2 rounded-2xl bg-[#0c1428]/85 border border-secondary/25 backdrop-blur-md shadow-[0_8px_32px_rgba(0,0,0,0.4)] z-20"
               >
                 <span className="text-base">⚡</span>
                 <div>
@@ -403,7 +406,7 @@ export function Hero() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 1.6 }}
-                className="absolute -bottom-7 left-1/2 -translate-x-1/2 whitespace-nowrap flex items-center gap-2 px-4 py-2 rounded-full bg-[#0b1020]/90 border border-white/10 backdrop-blur-md shadow-[0_4px_20px_rgba(0,0,0,0.5)] z-20"
+                className="absolute -bottom-10 left-1/2 -translate-x-1/2 whitespace-nowrap flex items-center gap-2 px-4 py-2 rounded-full bg-[#0b1020]/90 border border-white/10 backdrop-blur-md shadow-[0_4px_20px_rgba(0,0,0,0.5)] z-20"
               >
                 <motion.div
                   className="w-2 h-2 rounded-full bg-emerald-400"
