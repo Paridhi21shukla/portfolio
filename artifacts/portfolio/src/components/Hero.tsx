@@ -353,15 +353,9 @@ export function Hero() {
                   {/* Inner glass ring */}
                   <div className="absolute inset-0 rounded-full bg-[#060d1f] overflow-hidden">
                     <img
-                      src="/profile.jpg"
+                      src="/profile.png"
                       alt="Paridhi Shukla — AI & Full Stack Engineer"
                       className="w-full h-full object-cover"
-                      style={{
-                        objectPosition: "center 5%",
-                        transform: "scale(1.18)",
-                        transformOrigin: "center 12%",
-                        filter: "brightness(1.1) contrast(1.08) saturate(1.06)",
-                      }}
                     />
                     {/* Subtle inner shadow vignette */}
                     <div className="absolute inset-0 rounded-full shadow-[inset_0_0_50px_rgba(5,8,22,0.5)]" />
